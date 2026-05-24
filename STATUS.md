@@ -1,6 +1,6 @@
 # STATUS — PBR Material Maker (Comfy → Unreal)
 
-**Last updated:** 2026-05-24 (session 2)
+**Last updated:** 2026-05-24 (session 4)
 
 ---
 
@@ -33,37 +33,30 @@
 ## Known issues / next session
 
 ### 1. Normal map green channel flip — FIXED
-- `unreal_textureimport.py` now passes `flip_green_channel=True` for NORMAL textures automatically
-- Also fixed a silent bug: the normal type check was `"Normal"` (wrong case) instead of `"NORMAL"`, so normals were getting `TC_MASKS` compression instead of `TC_NORMALMAP` — both now corrected
-- Already-imported normals in existing material instances will still be wrong — re-run the import to get corrected textures
+- `unreal_textureimport.py` passes `flip_green_channel=True` for NORMAL textures automatically
+- Normal type check corrected to `"NORMAL"` — textures now get `TC_NORMALMAP` compression
 
-### 2. Nanite displacement — PARTIAL
-- `setup_nanite_displacement.py` handles steps 1 and 2 automatically (project setting + material tessellation flag)
-- Run once from Output Log: `py "D:/AI/materialmaker/setup_nanite_displacement.py"`
-- Step 3 (node wiring) still needs manual work in material editor — see script output for exact steps:
-  - Triplanar Displacement Result → ComponentMask(R) → Multiply(A)
-  - New ScalarParameter "DisplacementAmount" (default 1.0) → Multiply(B)
-  - Multiply → Displacement pin on Material Output node
+### 2. Nanite displacement — FIXED (confirmed by Sean)
+- Nanite working in the project
+- `setup_nanite_displacement.py` handles project settings and material tessellation flag
 
 ### 3. Easy launcher — DONE
 `Content/Python/pbr_menu.py` adds a **Tools > Import PBR Textures** menu item.
 One-time setup: Edit > Project Settings > Plugins > Python > Startup Scripts → add `pbr_menu.py` → restart editor.
 
-### 4. CHORD metalness output is pure black
-CHORD is generating a flat black metalness map — not a script issue, a ComfyUI workflow issue.
-- Investigate CHORD node settings / prompt for metalness in next session
-- Metalness scalar in M_PBR_Base params is a good fallback in the meantime
+### 4. CHORD metalness output — FIXED (by Sean in ComfyUI)
+Metalness map was pure black — fixed directly in the ComfyUI workflow.
 
-### 5. MI texture parameter setting (save-reload fix not yet applied)
-`set_material_instance_texture_parameter_value` may return False immediately after `create_asset()`.
-Verify by opening `MI_PBR_Plane_1` — check if texture slots are filled or empty.
-Fix (to apply to script):
-```python
-material_instance.set_editor_property('parent', base_material)
-unreal.EditorAssetLibrary.save_loaded_asset(material_instance)
-material_instance = unreal.load_asset(material_instance_path)
-# then set parameters
-```
+### 5. MI texture parameter save-reload fix — APPLIED (session 3)
+`set_material_instance_texture_parameter_value` can return False immediately after `create_asset()` because the freshly created UObject isn't fully initialised.
+Fix applied to `unreal_textureimport.py`: after setting the parent material, the script now saves and reloads the MI before setting texture parameters.
+
+### 6. Independent X/Y tiling — DEFERRED to next session
+- M_PBR_Base confirmed: BaseColor, Metallic, Roughness, Displacement all go through MF_VTA_Triplanar. NORMAL goes direct.
+- All triplanar instances share a single `TILE SIZE` scalar — independent X/Y not possible with current setup.
+- Triplanar switch script attempted but reverted (M_PBR_Base restored from backup). `set_texture_object_parameter_defaults()` also removed from import script (used protected `expressions` API).
+- **Plan for next session:** Reverse-engineer Unreal Sensei master material (owned by Sean) and rebuild for UE 5.5. His version supports local-space triplanar and many other features. Better foundation than patching current M_PBR_Base.
+- Backup of original M_PBR_Base lives at `/Game/3d_Material/M_PBR_Base_BACKUP` — keep it.
 
 ---
 

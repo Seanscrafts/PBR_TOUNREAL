@@ -152,6 +152,8 @@ def create_pbr_material_instance(textures, material_base_name="MI_PBR_Plane"):
         return None
 
     material_instance.set_editor_property('parent', base_material)
+    unreal.EditorAssetLibrary.save_loaded_asset(material_instance)
+    material_instance = unreal.load_asset(material_instance_path)
 
     for param_name, texture in textures.items():
         if texture:
@@ -244,31 +246,6 @@ def assign_material_to_actor(actor, material_asset):
     print(f"Material '{material_asset.get_name()}' assigned to actor '{actor.get_name()}'.")
 
 
-def set_texture_object_parameter_defaults(textures):
-    base_mat = unreal.load_asset('/Game/3d_Material/M_PBR_Base')
-    if not base_mat:
-        return
-    param_map = {
-        'Displacement': textures.get('Displacement'),
-        'Metallic':     textures.get('Metallic'),
-    }
-    try:
-        expressions = base_mat.get_editor_property('expressions')
-        changed = False
-        for expr in expressions:
-            if isinstance(expr, unreal.MaterialExpressionTextureObjectParameter):
-                param_name = str(expr.get_editor_property('parameter_name'))
-                if param_name in param_map and param_map[param_name]:
-                    expr.set_editor_property('texture', param_map[param_name])
-                    print(f"Set base material default for '{param_name}'")
-                    changed = True
-        if changed:
-            unreal.MaterialEditingLibrary.recompile_material(base_mat)
-            unreal.EditorAssetLibrary.save_loaded_asset(base_mat)
-            print("M_PBR_Base recompiled with updated Displacement/Metallic defaults")
-    except Exception as e:
-        print(f"Could not set TextureObjectParameter defaults: {e}")
-
 
 def fix_base_material_placeholder(normal_texture):
     placeholder_path = '/Game/Megascans/MSPresets/MSTextures/Placeholder_Normal'
@@ -318,7 +295,12 @@ def main():
         return
 
     fix_base_material_placeholder(textures.get("NORMAL"))
-    set_texture_object_parameter_defaults(textures)
+
+    # Also set the _UV TextureSampleParameter2D variants added by add_triplanar_switch.py.
+    # These are the params the MI can actually receive; the TextureObjectParameter nodes cannot.
+    textures['ROUGHNESS_UV']    = textures.get('ROUGHNESS')
+    textures['Metallic_UV']     = textures.get('Metallic')
+    textures['Displacement_UV'] = textures.get('Displacement')
 
     material_instance = create_pbr_material_instance(textures, material_base_name=base_name)
     if not material_instance:
