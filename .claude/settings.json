@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:11434/api/tags *)",
+      "Bash(ollama list)",
+      "Bash(netstat -ano *)",
+      "PowerShell(Get-ChildItem *)",
+      "mcp__comfyui__list_local_models",
+      "mcp__comfyui__list_workflows",
+      "mcp__comfyui__list_output_images",
+      "mcp__comfyui__list_assets",
+      "mcp__comfyui__get_queue",
+      "mcp__comfyui__get_system_stats",
+      "mcp__comfyui__get_logs",
+      "mcp__comfyui__get_history",
+      "mcp__comfyui__get_job_status",
+      "mcp__comfyui__get_image",
+      "mcp__comfyui__get_defaults",
+      "mcp__comfyui__get_node_info",
+      "mcp__comfyui__get_embeddings",
+      "mcp__comfyui__get_asset_metadata",
+      "mcp__comfyui__get_workflow",
+      "mcp__comfyui__generation_stats",
+      "mcp__comfyui__view_image",
+      "mcp__comfyui__visualize_workflow",
+      "mcp__comfyui__visualize_workflow_hierarchical",
+      "mcp__comfyui__analyze_workflow",
+      "mcp__comfyui__suggest_settings",
+      "mcp__unrealMCP__get_actors_in_level",
+      "mcp__unrealMCP__get_actor_properties",
+      "mcp__unrealMCP__find_actors_by_name",
+      "mcp__unrealMCP__find_blueprint_nodes",
+      "mcp__claude_ai_Google_Drive__read_file_content",
+      "mcp__claude_ai_Google_Drive__list_recent_files",
+      "mcp__claude_ai_Google_Drive__search_files",
+      "mcp__claude_ai_Google_Drive__get_file_metadata",
+      "mcp__claude_ai_Google_Drive__get_file_permissions",
+      "mcp__claude_ai_Google_Drive__download_file_content"
+    ]
+  }
+}

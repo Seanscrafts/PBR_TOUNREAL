@@ -1,0 +1,20 @@
+{
+	"version": 1,
+	"changelists": [
+		{
+			"guid": "00000000000000000000000000000000",
+			"description": "Default Uncontrolled Changelist",
+			"files": [
+				"F:/Documents_on_F/unreal projects/Comfy_unreal_tests/Content/StarterContent/Architecture/Floor_400x400.uasset",
+				"F:/Documents_on_F/unreal projects/Comfy_unreal_tests/Content/Material/M_PBR_Base.uasset",
+				"F:/Documents_on_F/unreal projects/Comfy_unreal_tests/Content/3d_Material/M_PBR_Base.uasset",
+				"F:/Documents_on_F/unreal projects/Comfy_unreal_tests/Content/Main.umap",
+				"F:/Documents_on_F/unreal projects/Comfy_unreal_tests/Content/ImportedTextures/depth__00006_.uasset",
+				"F:/Documents_on_F/unreal projects/Comfy_unreal_tests/Content/ImportedTextures/diffuse__00005_.uasset",
+				"F:/Documents_on_F/unreal projects/Comfy_unreal_tests/Content/ImportedTextures/Mask_00004_.uasset",
+				"F:/Documents_on_F/unreal projects/Comfy_unreal_tests/Content/ImportedTextures/normal__00005_.uasset",
+				"F:/Documents_on_F/unreal projects/Comfy_unreal_tests/Content/ImportedTextures/Roughness_00001_.uasset"
+			]
+		}
+	]
+}
