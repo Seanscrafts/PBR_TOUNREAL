@@ -1,6 +1,6 @@
 # STATUS — PBR Material Maker (Comfy → Unreal)
 
-**Last updated:** 2026-05-24
+**Last updated:** 2026-05-24 (session 2)
 
 ---
 
@@ -32,25 +32,29 @@
 
 ## Known issues / next session
 
-### 1. Normal map needs green channel flip
-CHORD outputs OpenGL normals (Y-up). Unreal expects DirectX (Y-down).
-- Quick fix: open `ImportedTextures/1/Normal_00001_` → check **Flip Green Channel** in Details
-- Script fix: add `flip_green_channel = True` to normal texture import — do this so it's automatic
+### 1. Normal map green channel flip — FIXED
+- `unreal_textureimport.py` now passes `flip_green_channel=True` for NORMAL textures automatically
+- Also fixed a silent bug: the normal type check was `"Normal"` (wrong case) instead of `"NORMAL"`, so normals were getting `TC_MASKS` compression instead of `TC_NORMALMAP` — both now corrected
+- Already-imported normals in existing material instances will still be wrong — re-run the import to get corrected textures
 
-### 2. Nanite displacement not wired up
-Mesh has Nanite enabled but displacement isn't connected in the material.
-Steps:
-1. Project Settings → Rendering → Nanite → enable **Tessellation**
-2. Open `M_PBR_Base` → Details → enable **Tessellation**
-3. Wire: Displacement triplanar Result → ComponentMask(R) → **Displacement** pin on output node
-4. Add a scalar multiplier before the pin to control amplitude per-instance
+### 2. Nanite displacement — PARTIAL
+- `setup_nanite_displacement.py` handles steps 1 and 2 automatically (project setting + material tessellation flag)
+- Run once from Output Log: `py "D:/AI/materialmaker/setup_nanite_displacement.py"`
+- Step 3 (node wiring) still needs manual work in material editor — see script output for exact steps:
+  - Triplanar Displacement Result → ComponentMask(R) → Multiply(A)
+  - New ScalarParameter "DisplacementAmount" (default 1.0) → Multiply(B)
+  - Multiply → Displacement pin on Material Output node
 
-### 3. CHORD metalness output is pure black
+### 3. Easy launcher — DONE
+`Content/Python/pbr_menu.py` adds a **Tools > Import PBR Textures** menu item.
+One-time setup: Edit > Project Settings > Plugins > Python > Startup Scripts → add `pbr_menu.py` → restart editor.
+
+### 4. CHORD metalness output is pure black
 CHORD is generating a flat black metalness map — not a script issue, a ComfyUI workflow issue.
 - Investigate CHORD node settings / prompt for metalness in next session
 - Metalness scalar in M_PBR_Base params is a good fallback in the meantime
 
-### 4. MI texture parameter setting (save-reload fix not yet applied)
+### 5. MI texture parameter setting (save-reload fix not yet applied)
 `set_material_instance_texture_parameter_value` may return False immediately after `create_asset()`.
 Verify by opening `MI_PBR_Plane_1` — check if texture slots are filled or empty.
 Fix (to apply to script):

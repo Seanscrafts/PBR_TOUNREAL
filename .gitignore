@@ -1,7 +1,9 @@
 Comfy_unreal_tests/
 PBRFusionPortable*/
+PBR_generator_demo/
 UnrealMats/
 *.png
 *.jpg
 *.jpeg
+*.pdf
 .claude/

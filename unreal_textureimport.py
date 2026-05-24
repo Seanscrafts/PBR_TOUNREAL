@@ -75,13 +75,16 @@ def load_pbr_textures(texture_folder, texture_subfolder):
                 if texture_type == "BaseColor":
                     srgb = True
                     compression = unreal.TextureCompressionSettings.TC_DEFAULT
-                elif texture_type == "Normal":
+                    flip_green = False
+                elif texture_type == "NORMAL":
                     srgb = False
                     compression = unreal.TextureCompressionSettings.TC_NORMALMAP
+                    flip_green = True
                 else:
                     srgb = False
                     compression = unreal.TextureCompressionSettings.TC_MASKS
-                texture_asset = import_texture(filepath, texture_subfolder, srgb=srgb, compression_settings=compression)
+                    flip_green = False
+                texture_asset = import_texture(filepath, texture_subfolder, srgb=srgb, compression_settings=compression, flip_green_channel=flip_green)
                 textures[texture_type] = texture_asset
                 print(f"Assigned '{filename}' to '{texture_type}'")
                 break
@@ -90,7 +93,7 @@ def load_pbr_textures(texture_folder, texture_subfolder):
     return textures
 
 
-def import_texture(filepath, texture_subfolder, srgb=True, compression_settings=unreal.TextureCompressionSettings.TC_DEFAULT):
+def import_texture(filepath, texture_subfolder, srgb=True, compression_settings=unreal.TextureCompressionSettings.TC_DEFAULT, flip_green_channel=False):
     texture_task = unreal.AssetImportTask()
     texture_task.filename = filepath
     texture_task.destination_path = texture_subfolder
@@ -109,6 +112,8 @@ def import_texture(filepath, texture_subfolder, srgb=True, compression_settings=
 
         texture_asset.set_editor_property('sRGB', srgb)
         texture_asset.set_editor_property('compression_settings', compression_settings)
+        if flip_green_channel:
+            texture_asset.set_editor_property('flip_green_channel', True)
 
         unreal.EditorAssetLibrary.save_loaded_asset(texture_asset)
         print(f"Imported texture: {imported_asset_path}")
@@ -125,7 +130,7 @@ def create_pbr_material_instance(textures, material_base_name="MI_PBR_Plane"):
         print(f"Base material not found at {base_material_path}. Please create it manually.")
         return None
 
-    material_instance_folder = "/Game/Materials"
+    material_instance_folder = "/Game/3d_Material/Instances"
     next_number = get_next_sequential_number(material_base_name, material_instance_folder)
     material_name = f"{material_base_name}_{next_number}"
     material_instance_path = f"{material_instance_folder}/{material_name}"
@@ -296,10 +301,10 @@ def main():
         return
 
     base_name = "MI_PBR_Plane"
-    material_instance_folder = "/Game/Materials"
+    material_instance_folder = "/Game/3d_Material/Instances"
     next_number = get_next_sequential_number(base_name, material_instance_folder)
 
-    texture_subfolder = f"/Game/ImportedTextures/{next_number}"
+    texture_subfolder = f"/Game/3d_Material/Textures/{next_number}"
     if not unreal.EditorAssetLibrary.does_directory_exist(texture_subfolder):
         unreal.EditorAssetLibrary.make_directory(texture_subfolder)
 
