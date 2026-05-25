@@ -1,0 +1,7 @@
+{
+  "texture_output_folder": "",
+  "master_material_path": "/Game/SenseiMaterials/Materials/M_BlendMaster_Nanite",
+  "mi_folder": "/Game/3dTextures/MaterialInstances",
+  "texture_base_folder": "/Game/3dTextures/Textures",
+  "mi_base_name": "MI_3dmaterial"
+}

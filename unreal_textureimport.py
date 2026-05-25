@@ -11,16 +11,31 @@ imports all 5 maps, creates a material instance from M_BlendMaster_Nanite.
 """
 
 import unreal
+import json
 import os
 import re
+import sys
+from pathlib import Path
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-TEXTURE_FOLDER      = r"D:\AI\materialmaker\UnrealMats"
-MASTER_MATERIAL     = "/Game/SenseiMaterials/Materials/M_BlendMaster_Nanite"
-MI_FOLDER           = "/Game/3dTextures/MaterialInstances"
-TEXTURE_BASE_FOLDER = "/Game/3dTextures/Textures"
-MI_BASE_NAME        = "MI_3dmaterial"
+config_path = Path(__file__).parent / "config.json"
+try:
+    with config_path.open("r", encoding="utf-8") as config_file:
+        config = json.load(config_file)
+except FileNotFoundError:
+    print("ERROR: Run install.py first to configure your paths.")
+    sys.exit(1)
+
+if not config.get("texture_output_folder"):
+    print("ERROR: Run install.py first to configure your paths.")
+    sys.exit(1)
+
+TEXTURE_FOLDER      = config["texture_output_folder"]
+MASTER_MATERIAL     = config["master_material_path"]
+MI_FOLDER           = config["mi_folder"]
+TEXTURE_BASE_FOLDER = config["texture_base_folder"]
+MI_BASE_NAME        = config["mi_base_name"]
 
 # Map from M_BlendMaster_Nanite Layer A texture param names to CHORD filename prefixes
 TEXTURE_PARAMS = {

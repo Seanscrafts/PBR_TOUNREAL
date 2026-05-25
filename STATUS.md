@@ -1,6 +1,6 @@
 # STATUS — PBR Material Maker (Comfy → Unreal)
 
-**Last updated:** 2026-05-25 (session 6)
+**Last updated:** 2026-05-25 (session 7)
 
 ---
 
@@ -46,23 +46,30 @@ Fixed source is live in both:
 
 ---
 
+## What was done (session 7)
+
+**Distribution packaging complete.**
+
+| File | Change |
+|---|---|
+| `install.py` | New — one-command installer for new users |
+| `config.json` | New — path config template (`texture_output_folder` blank until install) |
+| `pbr_menu.py` | Updated — path to import script now dynamic via `__file__`, no hardcoded paths |
+| `unreal_textureimport.py` | Updated — loads all paths from `config.json` at runtime |
+| `workflows/` | New folder — 3 ComfyUI workflow JSONs copied from ComfyUI install into repo |
+
+Primary workflow: `Texturemaker_CHORD_img2pbr_switchable_seamless.json`
+
+`install.py` does:
+1. Asks for UE project path + texture output folder
+2. Writes `config.json` to repo and `Content/Python/`
+3. Patches output folder path in all 3 workflow JSONs
+4. Copies scripts to `<UE project>/Content/Python/`
+
 ## Next task
 
-**Package the pipeline for distribution** — so others can install it without a D drive or ComfyUI.
-
-Key design questions to resolve at session start:
-- Config file for paths (texture folder, UE project dir) — user-editable, not hardcoded
-- ComfyUI optional or required? (currently required for texture generation)
-- Distribution format: installer script, zip + README, or something else
-- Where does the UE plugin live in the package?
-
-Steps remaining:
-1. [ ] **Next:** Design distribution format and path config approach
-2. [ ] Extract hardcoded paths from `unreal_textureimport.py` into a config file
-3. [ ] Extract hardcoded paths from `pbr_menu.py` into same config
-4. [ ] Write install script (sets up folders, copies files to UE Content/Python)
-5. [ ] Test clean install on a machine without existing project setup
-6. [ ] Re-register Python MCP server to new project path (separate task)
+1. [ ] Test clean install on second machine
+2. [ ] Re-register Python MCP server to BlendMasterMaterial project path (separate task)
 
 ---
 

@@ -1,0 +1,447 @@
+{
+  "id": "chord-unreal-img2pbr-v1",
+  "revision": 0,
+  "last_node_id": 36,
+  "last_link_id": 55,
+  "nodes": [
+    {
+      "id": 12,
+      "type": "ChordLoadModel",
+      "pos": [30, 80],
+      "size": [320, 58],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "chord_model", "type": "chord_model", "links": [25] }
+      ],
+      "properties": {
+        "aux_id": "ubisoft/ComfyUI-Chord",
+        "ver": "a3db2834454fbced4f5fc4b2d529df5c517ebe45",
+        "Node name for S&R": "ChordLoadModel"
+      },
+      "widgets_values": ["chord_v1.safetensors"]
+    },
+    {
+      "id": 24,
+      "type": "LoadImage",
+      "pos": [30, 190],
+      "size": [320, 320],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "IMAGE", "type": "IMAGE", "links": [39] },
+        { "name": "MASK",  "type": "MASK",  "links": [] }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.71",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": ["example.png", "image"]
+    },
+    {
+      "id": 21,
+      "type": "ChordMaterialEstimation",
+      "pos": [430, 490],
+      "size": [240, 120],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        { "name": "chord_model", "type": "chord_model", "link": 25 },
+        { "name": "image",       "type": "IMAGE",       "link": 39 }
+      ],
+      "outputs": [
+        { "name": "basecolor", "type": "IMAGE", "links": [27, 44, 49] },
+        { "name": "normal",    "type": "IMAGE", "links": [] },
+        { "name": "roughness", "type": "IMAGE", "links": [30, 51, 54] },
+        { "name": "metalness", "type": "IMAGE", "links": [] }
+      ],
+      "properties": {
+        "aux_id": "ubisoft/ComfyUI-Chord",
+        "ver": "53296391fe2cf7f3f370a5c6536dcb2177221257",
+        "Node name for S&R": "ChordMaterialEstimation"
+      },
+      "widgets_values": []
+    },
+
+    {
+      "id": 30,
+      "type": "PreviewImage",
+      "pos": [760, 20],
+      "size": [310, 280],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [{ "name": "images", "type": "IMAGE", "link": 49 }],
+      "outputs": [],
+      "title": "Preview — BaseColor",
+      "properties": { "cnr_id": "comfy-core", "Node name for S&R": "PreviewImage" },
+      "widgets_values": []
+    },
+
+    {
+      "id": 27,
+      "type": "BAE-NormalMapPreprocessor",
+      "pos": [760, 370],
+      "size": [315, 100],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [{ "name": "image", "type": "IMAGE", "link": 44 }],
+      "outputs": [
+        { "name": "IMAGE", "type": "IMAGE", "slot_index": 0, "links": [45, 46, 50] }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_controlnet_aux",
+        "Node name for S&R": "BAE-NormalMapPreprocessor"
+      },
+      "widgets_values": [1024],
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "title": "Normal Map (BAE)"
+    },
+    {
+      "id": 31,
+      "type": "PreviewImage",
+      "pos": [1110, 370],
+      "size": [310, 280],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [{ "name": "images", "type": "IMAGE", "link": 50 }],
+      "outputs": [],
+      "title": "Preview — Normal",
+      "properties": { "cnr_id": "comfy-core", "Node name for S&R": "PreviewImage" },
+      "widgets_values": []
+    },
+
+    {
+      "id": 28,
+      "type": "ChordNormalToHeight",
+      "pos": [760, 720],
+      "size": [260, 58],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [{ "name": "normal", "type": "IMAGE", "link": 46 }],
+      "outputs": [
+        { "name": "height", "type": "IMAGE", "slot_index": 0, "links": [47, 53] }
+      ],
+      "properties": {
+        "aux_id": "ubisoft/ComfyUI-Chord",
+        "ver": "a3db2834454fbced4f5fc4b2d529df5c517ebe45",
+        "Node name for S&R": "ChordNormalToHeight"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 34,
+      "type": "PreviewImage",
+      "pos": [1060, 710],
+      "size": [310, 280],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [{ "name": "images", "type": "IMAGE", "link": 53 }],
+      "outputs": [],
+      "title": "Preview — Displacement",
+      "properties": { "cnr_id": "comfy-core", "Node name for S&R": "PreviewImage" },
+      "widgets_values": []
+    },
+
+    {
+      "id": 32,
+      "type": "PreviewImage",
+      "pos": [760, 1040],
+      "size": [310, 280],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [{ "name": "images", "type": "IMAGE", "link": 51 }],
+      "outputs": [],
+      "title": "Preview — Roughness",
+      "properties": { "cnr_id": "comfy-core", "Node name for S&R": "PreviewImage" },
+      "widgets_values": []
+    },
+
+    {
+      "id": 35,
+      "type": "ImageInvert",
+      "pos": [760, 1410],
+      "size": [210, 58],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [{ "name": "image", "type": "IMAGE", "link": 54 }],
+      "outputs": [
+        { "name": "IMAGE", "type": "IMAGE", "slot_index": 0, "links": [55] }
+      ],
+      "title": "Invert Roughness → Metalness",
+      "properties": { "cnr_id": "comfy-core", "Node name for S&R": "ImageInvert" },
+      "widgets_values": []
+    },
+    {
+      "id": 29,
+      "type": "AdjustBrightnessContrastSaturationNode",
+      "pos": [1010, 1400],
+      "size": [280, 106],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [{ "name": "image", "type": "IMAGE", "link": 55 }],
+      "outputs": [
+        { "name": "image", "type": "IMAGE", "slot_index": 0, "links": [48, 52] }
+      ],
+      "title": "Metalness Adjust",
+      "properties": {
+        "aux_id": "MinusZero962/ComfyUI-MingNodes",
+        "Node name for S&R": "AdjustBrightnessContrastSaturationNode"
+      },
+      "widgets_values": [0.0, 2.0, 0.0]
+    },
+    {
+      "id": 33,
+      "type": "PreviewImage",
+      "pos": [1340, 1400],
+      "size": [310, 280],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [{ "name": "images", "type": "IMAGE", "link": 52 }],
+      "outputs": [],
+      "title": "Preview — Metalness",
+      "properties": { "cnr_id": "comfy-core", "Node name for S&R": "PreviewImage" },
+      "widgets_values": []
+    },
+
+    {
+      "id": 17,
+      "type": "SaveImageKJ",
+      "pos": [1760, 20],
+      "size": [300, 180],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        { "name": "images",                  "type": "IMAGE",  "link": 27 },
+        { "name": "caption",                 "shape": 7, "type": "STRING", "link": null },
+        { "name": "filename_prefix",         "type": "STRING", "widget": {"name": "filename_prefix"}, "link": null },
+        { "name": "output_folder",           "type": "STRING", "widget": {"name": "output_folder"},   "link": 37 },
+        { "name": "caption_file_extension",  "shape": 7, "type": "STRING", "widget": {"name": "caption_file_extension"}, "link": null }
+      ],
+      "outputs": [{ "name": "filename", "type": "STRING", "slot_index": 0, "links": [] }],
+      "title": "Save — BaseColor",
+      "properties": { "cnr_id": "comfyui-kjnodes", "ver": "1.3.9", "Node name for S&R": "SaveImageKJ" },
+      "widgets_values": ["BaseColor", "output", ".txt"]
+    },
+    {
+      "id": 13,
+      "type": "SaveImageKJ",
+      "pos": [1760, 250],
+      "size": [300, 180],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        { "name": "images",                  "type": "IMAGE",  "link": 45 },
+        { "name": "caption",                 "shape": 7, "type": "STRING", "link": null },
+        { "name": "filename_prefix",         "type": "STRING", "widget": {"name": "filename_prefix"}, "link": null },
+        { "name": "output_folder",           "type": "STRING", "widget": {"name": "output_folder"},   "link": 34 },
+        { "name": "caption_file_extension",  "shape": 7, "type": "STRING", "widget": {"name": "caption_file_extension"}, "link": null }
+      ],
+      "outputs": [{ "name": "filename", "type": "STRING", "slot_index": 0, "links": [] }],
+      "title": "Save — Normal",
+      "properties": { "cnr_id": "comfyui-kjnodes", "ver": "1.3.9", "Node name for S&R": "SaveImageKJ" },
+      "widgets_values": ["Normal", "output", ".txt"]
+    },
+    {
+      "id": 16,
+      "type": "SaveImageKJ",
+      "pos": [1760, 480],
+      "size": [300, 180],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        { "name": "images",                  "type": "IMAGE",  "link": 47 },
+        { "name": "caption",                 "shape": 7, "type": "STRING", "link": null },
+        { "name": "filename_prefix",         "type": "STRING", "widget": {"name": "filename_prefix"}, "link": null },
+        { "name": "output_folder",           "type": "STRING", "widget": {"name": "output_folder"},   "link": 36 },
+        { "name": "caption_file_extension",  "shape": 7, "type": "STRING", "widget": {"name": "caption_file_extension"}, "link": null }
+      ],
+      "outputs": [{ "name": "filename", "type": "STRING", "slot_index": 0, "links": [] }],
+      "title": "Save — Displacement",
+      "properties": { "cnr_id": "comfyui-kjnodes", "ver": "1.3.9", "Node name for S&R": "SaveImageKJ" },
+      "widgets_values": ["Displacement", "output", ".txt"]
+    },
+    {
+      "id": 18,
+      "type": "SaveImageKJ",
+      "pos": [1760, 710],
+      "size": [300, 180],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        { "name": "images",                  "type": "IMAGE",  "link": 30 },
+        { "name": "caption",                 "shape": 7, "type": "STRING", "link": null },
+        { "name": "filename_prefix",         "type": "STRING", "widget": {"name": "filename_prefix"}, "link": null },
+        { "name": "output_folder",           "type": "STRING", "widget": {"name": "output_folder"},   "link": 38 },
+        { "name": "caption_file_extension",  "shape": 7, "type": "STRING", "widget": {"name": "caption_file_extension"}, "link": null }
+      ],
+      "outputs": [{ "name": "filename", "type": "STRING", "slot_index": 0, "links": [] }],
+      "title": "Save — Roughness",
+      "properties": { "cnr_id": "comfyui-kjnodes", "ver": "1.3.9", "Node name for S&R": "SaveImageKJ" },
+      "widgets_values": ["Roughness", "output", ".txt"]
+    },
+    {
+      "id": 14,
+      "type": "SaveImageKJ",
+      "pos": [1760, 940],
+      "size": [300, 180],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        { "name": "images",                  "type": "IMAGE",  "link": 48 },
+        { "name": "caption",                 "shape": 7, "type": "STRING", "link": null },
+        { "name": "filename_prefix",         "type": "STRING", "widget": {"name": "filename_prefix"}, "link": null },
+        { "name": "output_folder",           "type": "STRING", "widget": {"name": "output_folder"},   "link": 35 },
+        { "name": "caption_file_extension",  "shape": 7, "type": "STRING", "widget": {"name": "caption_file_extension"}, "link": null }
+      ],
+      "outputs": [{ "name": "filename", "type": "STRING", "slot_index": 0, "links": [] }],
+      "title": "Save — Metalness",
+      "properties": { "cnr_id": "comfyui-kjnodes", "ver": "1.3.9", "Node name for S&R": "SaveImageKJ" },
+      "widgets_values": ["Metalness", "output", ".txt"]
+    },
+    {
+      "id": 36,
+      "type": "Note",
+      "pos": [760, 1720],
+      "size": [900, 270],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Metalness Guide",
+      "properties": { "cnr_id": "comfy-core", "Node name for S&R": "Note" },
+      "widgets_values": ["METALNESS — HOW TO ADJUST\n\nThis map is INVERTED ROUGHNESS. Smooth surfaces (low roughness) → bright metalness. Rough surfaces → dark metalness.\n\n── NON-METALLIC MATERIAL (wood, stone, fabric, leather) ──\nExpect dark / black result. That's correct — leave as is.\nIf it looks too bright: set Brightness to -1 or -2.\n\n── MIXED MATERIAL (painted metal, worn / rusted metal) ──\nSmooth shiny patches will appear metallic (bright).\nRough corroded patches will appear non-metallic (dark).\nRaise Contrast (3–5) to sharpen the boundary between them.\n\n── PURE METAL (steel, chrome, polished aluminium) ──\nExpect mostly bright / white result.\nIf still too dark: raise Brightness to 2–4.\nIf flat grey with no detail: raise Contrast to 4–6.\n\n── COMPLETELY BLACK NO MATTER WHAT ──\nCHORD output uniform high roughness — nothing to invert.\nTry Brightness 4–6 to lift the floor, then Contrast 3–5.\nFor mirror-finish metal consider painting metalness manually."]
+    },
+    {
+      "id": 23,
+      "type": "PrimitiveStringMultiline",
+      "pos": [1760, 1170],
+      "size": [400, 80],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "STRING", "type": "STRING", "links": [34, 35, 36, 37, 38] }
+      ],
+      "title": "Output Folder Path",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.71",
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": ["D:\\AI\\materialmaker\\UnrealMats"]
+    }
+  ],
+  "links": [
+    [25,  12, 0, 21, 0, "chord_model"],
+    [27,  21, 0, 17, 0, "IMAGE"],
+    [30,  21, 2, 18, 0, "IMAGE"],
+    [34,  23, 0, 13, 3, "STRING"],
+    [35,  23, 0, 14, 3, "STRING"],
+    [36,  23, 0, 16, 3, "STRING"],
+    [37,  23, 0, 17, 3, "STRING"],
+    [38,  23, 0, 18, 3, "STRING"],
+    [39,  24, 0, 21, 1, "IMAGE"],
+    [44,  21, 0, 27, 0, "IMAGE"],
+    [45,  27, 0, 13, 0, "IMAGE"],
+    [46,  27, 0, 28, 0, "IMAGE"],
+    [47,  28, 0, 16, 0, "IMAGE"],
+    [48,  29, 0, 14, 0, "IMAGE"],
+    [49,  21, 0, 30, 0, "IMAGE"],
+    [50,  27, 0, 31, 0, "IMAGE"],
+    [51,  21, 2, 32, 0, "IMAGE"],
+    [52,  29, 0, 33, 0, "IMAGE"],
+    [53,  28, 0, 34, 0, "IMAGE"],
+    [54,  21, 2, 35, 0, "IMAGE"],
+    [55,  35, 0, 29, 0, "IMAGE"]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "INPUT",
+      "bounding": [-20, 60, 380, 490],
+      "color": "#b58b2a",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "BaseColor",
+      "bounding": [740, -10, 380, 330],
+      "color": "#3a5f3a",
+      "font_size": 20,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "Normal Map",
+      "bounding": [740, 350, 720, 330],
+      "color": "#3a4f6a",
+      "font_size": 20,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "Displacement",
+      "bounding": [740, 700, 680, 330],
+      "color": "#5a4a3a",
+      "font_size": 20,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "Roughness",
+      "bounding": [740, 1020, 380, 330],
+      "color": "#4a4a4a",
+      "font_size": 20,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "Metalness  (inverted from roughness)",
+      "bounding": [740, 1380, 960, 660],
+      "color": "#5a3a5a",
+      "font_size": 20,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "SAVE TO DISK  ·  right-click this group → Mute to skip saving",
+      "bounding": [1740, -10, 440, 1310],
+      "color": "#7a2a2a",
+      "font_size": 18,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5,
+      "offset": [-200, -100]
+    },
+    "frontendVersion": "1.33.10"
+  },
+  "version": 0.4
+}
