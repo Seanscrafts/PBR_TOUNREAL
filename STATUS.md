@@ -66,10 +66,24 @@ Primary workflow: `Texturemaker_CHORD_img2pbr_switchable_seamless.json`
 3. Patches output folder path in all 3 workflow JSONs
 4. Copies scripts to `<UE project>/Content/Python/`
 
+## What was done (session 8)
+
+**PBR Set Picker added.**
+
+| File | Change |
+|---|---|
+| `unreal_textureimport.py` | Replaced auto-latest logic with `pick_generation()` — tkinter popup lists all available sets, user picks one. Enter key and double-click both work. |
+| `unreal_textureimport_BACKUP.py` | Backup of previous version — do not delete |
+
+- Repo remote updated to `Seanscrafts/PBR_TOUNREAL` (was previously under a different account)
+- Git user set locally: Seanscrafts / pretorius.sean@gmail.com
+- Live copy deployed to: `C:\Users\esmev\Documents\Unreal Projects\BlendMasterMaterial\Content\Python\`
+
 ## Next task
 
-1. [ ] Test clean install on second machine
-2. [ ] Re-register Python MCP server to BlendMasterMaterial project path (separate task)
+1. [ ] Phase 2 — `pbr_ingest.py` external PBR pack importer (see `C:\ai\PBR_UPGRADE_PLAN.md`)
+2. [ ] Test clean install on second machine
+3. [ ] Re-register Python MCP server to BlendMasterMaterial project path (separate task)
 
 ---
 
