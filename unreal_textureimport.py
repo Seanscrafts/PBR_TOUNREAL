@@ -85,15 +85,68 @@ def get_next_sequential_number(base_name, asset_path):
     return max(numbers) + 1 if numbers else 1
 
 
-def find_latest_generation(folder):
+def pick_generation(folder):
     pattern = re.compile(r'^.+_(\d+)_\.(png|jpg|jpeg|tga)$', re.IGNORECASE)
-    numbers = [int(m.group(1)) for f in os.listdir(folder) if (m := pattern.match(f))]
-    if numbers:
-        highest = max(numbers)
-        unreal.log(f"Latest generation: {highest}")
-        return str(highest).zfill(5)
-    unreal.log_error("No ComfyUI texture files found in " + folder)
-    return None
+    sets = {}
+    for f in os.listdir(folder):
+        m = pattern.match(f)
+        if m:
+            num = m.group(1)
+            sets[num] = sets.get(num, 0) + 1
+
+    if not sets:
+        unreal.log_error("No texture sets found in " + folder)
+        return None
+
+    sorted_nums = sorted(sets.keys(), key=lambda x: int(x))
+
+    if len(sorted_nums) == 1:
+        unreal.log(f"One set found, using: {sorted_nums[0]}")
+        return sorted_nums[0]
+
+    import tkinter as tk
+
+    labels = [f"Set {n}  —  {sets[n]} maps" for n in sorted_nums]
+    selected = [None]
+
+    root = tk.Tk()
+    root.title("Select PBR Set")
+    root.geometry("320x220")
+    root.lift()
+    root.attributes("-topmost", True)
+
+    tk.Label(root, text="Choose a PBR set to import:", pady=8).pack()
+
+    listbox = tk.Listbox(root, selectmode=tk.SINGLE, width=40)
+    for label in labels:
+        listbox.insert(tk.END, label)
+    listbox.select_set(len(labels) - 1)
+    listbox.pack(fill=tk.BOTH, expand=True, padx=12)
+    listbox.bind('<Double-Button-1>', lambda e: on_ok())
+    listbox.bind('<Return>', lambda e: on_ok())
+
+    def on_ok():
+        sel = listbox.curselection()
+        if sel:
+            selected[0] = sorted_nums[sel[0]]
+        root.destroy()
+
+    def on_cancel():
+        root.destroy()
+
+    frame = tk.Frame(root)
+    frame.pack(pady=8)
+    tk.Button(frame, text="Import", width=10, command=on_ok).pack(side=tk.LEFT, padx=6)
+    tk.Button(frame, text="Cancel", width=10, command=on_cancel).pack(side=tk.LEFT, padx=6)
+
+    root.mainloop()
+
+    if selected[0] is None:
+        unreal.log("Import cancelled.")
+        return None
+
+    unreal.log(f"Selected set: {selected[0]}")
+    return selected[0]
 
 # ── Import ────────────────────────────────────────────────────────────────────
 
@@ -122,7 +175,7 @@ def import_texture(filepath, dest_folder, srgb, compression, flip_green):
 
 
 def load_pbr_textures(folder, dest_folder):
-    generation = find_latest_generation(folder)
+    generation = pick_generation(folder)
     if not generation:
         return None
 
